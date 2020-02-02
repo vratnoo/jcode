@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{%block app_content %}
+{% for post in posts %}
+<h4>{{ post.title }}</h4>
+<p>{{ post.content }}</p>
+<a href="{{ url_for("tags",tag = post.tag) }}"># {{ post.tag}}</a>
+{% endfor %}
+
+{% endblock %}

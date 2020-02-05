@@ -5,7 +5,7 @@ import json
 @app.route('/')
 def index():
 	
-	posts = Post.post_data("")
+	posts = Post.query.all()
 	return render_template('index.html',title="Jeeblog",posts=posts)
 @app.route('/tags/<tag>')
 def tags(tag):

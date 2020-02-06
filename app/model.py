@@ -20,11 +20,11 @@ tag_post = db.Table('tag_post',db.Column('post_id',db.Integer,db.ForeignKey('pos
 class Post(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     title = db.Column(db.String(50))
-    body=db.Column(db.String(140))
+    body=db.Column(db.Text)
     timestamp=db.Column(db.DateTime,index=True,default=datetime.utcnow)
     #user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
-    
-    
+    page_id = db.Column(db.Integer,db.ForeignKey('page.id'))
+    page = db.relationship('Page',backref='posts',lazy=True)
     tags = db.relationship('Tag',secondary='tag_post',backref=db.backref('posts',lazy='dynamic'))
 
 
@@ -39,3 +39,11 @@ class Tag(db.Model):
 
     def __repr__(self):
         return f"Tag is {self.name}"
+
+
+class Page(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(40))
+    
+
+

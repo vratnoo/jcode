@@ -2,8 +2,14 @@
 {%block app_content %}
 {% for post in posts %}
 <h4>{{ post.title }}</h4>
-<p>{{ post.body }}</p>
-<a href="{{ url_for("tags",tag = post.tag) }}"># {{ post.tag}}</a>
+
+{% filter markdown %}
+{{ post.body }}
+{% endfilter %}
+
+{% for p in post.tags %}
+<a href="{{ url_for("tags",tag = p.name) }}"># {{ p.name }}</a>
+{% endfor %}
 {% endfor %}
 
 {% endblock %}

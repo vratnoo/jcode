@@ -1,15 +1,43 @@
 {% extends "base.html" %}
 {%block app_content %}
 {% for post in posts %}
-<h4>{{ post.title }}</h4>
 
-{% filter markdown %}
-{{ post.body }}
-{% endfilter %}
 
-{% for p in post.tags %}
-<a href="{{ url_for("tags",tag = p.name) }}"># {{ p.name }}</a>
-{% endfor %}
+              <h3 class="pb-4 mb-4 font-italic border-bottom">
+                Posts
+              </h3>
+        
+              <div class="blog-post">
+                <h2 class="blog-post-title">{{ post.title }}t</h2>
+                <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+                {% filter markdown %}
+                {% if is_active('post')=='active' %}
+                dfdsfdfdfsd
+                {{ post.body }}
+         		{% else %}
+				{{ post.body | truncate(150) }}
+				<a class="" href="{{ url_for('post',post_name=post.title)}}">Read More</a>
+				{% endif %}
+				{% endfilter %}
+
+				{% for p in post.tags %}
+				<a class="badge badge-info" href="{{ url_for("tags",tag = p.name) }}"># {{ p.name }}</a>
+				{% endfor %}
+                
+                
+              </div><!-- /.blog-post -->
+        
+             
+        
+            
+
+
+
+
+
 {% endfor %}
 
 {% endblock %}
+
+
+

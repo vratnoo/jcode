@@ -10,7 +10,8 @@ from helper import is_active
 @app.context_processor
 def helper_processor():
 	pages = Page.query.all()
-	return dict(is_active=is_active,pages=pages)
+	tags = Tag.query.all()
+	return dict(is_active=is_active,pages=pages,tags=tags)
 
 
 
@@ -19,25 +20,28 @@ def helper_processor():
 @app.route('/')
 def index():
 	app.config['CU_PAGE'] = "index"
-	pages  = Page.query.all()
+
 	posts = Post.query.all()
 	
-	return render_template('index.html',title="Jeeblog",posts=posts,pages=pages)
+	return render_template('index.html',title="Jeeblog",posts=posts)
 
 
 @app.route('/post/<post_name>')
 def post(post_name):
+	
 	posts = Post.query.filter_by(title=post_name)
+	p = Post.query.filter_by(title=post_name).first()
 	print(posts)
 	app.config['CU_PAGE'] = "post"
 	
-	return render_template('index.html',title="JEEBLOG",posts=posts)
+	return render_template('article.html',title="JEEBLOG",posts=posts,)
 @app.route('/tags/<tag>')
 def tags(tag):
 	pages  = Page.query.all()
 	p = Tag.query.filter_by(name=tag).first()
+	tags = Tag.query.all()
 	posts  = p.posts.all()
-	return render_template('index.html',title="Jeeblog",posts=posts,pages=pages)
+	return render_template('index.html',title="Jeeblog",posts=posts)
 
 @app.route('/page/<page>')
 def page(page):
@@ -46,7 +50,7 @@ def page(page):
 	pages  = Page.query.all()
 	p = Page.query.filter_by(name=page).first()
 	print(p)
-	return render_template('index.html',title="Jeeblog",posts=p.posts,pages=pages)
+	return render_template('index.html',title="Jeeblog",posts=p.posts)
 # photo uploads functionnulity
 @app.route('/photo', methods=['GET', 'POST'])
 def photo():

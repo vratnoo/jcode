@@ -1,40 +1,24 @@
 {% extends "base.html" %}
-{%block app_content %}
-{% for post in posts %}
-
-
-              <h3 class="pb-4 mb-4 font-italic border-bottom">
-                Posts
-              </h3>
-        
-              <div class="blog-post">
-                <h2 class="blog-post-title">{{ post.title }}t</h2>
-                <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
-                {% filter markdown %}
-                {% if is_active('post')=='active' %}
-                dfdsfdfdfsd
-                {{ post.body }}
-         		{% else %}
-				{{ post.body | truncate(150) }}
-				<a class="" href="{{ url_for('post',post_name=post.title)}}">Read More</a>
-				{% endif %}
-				{% endfilter %}
-
-				{% for p in post.tags %}
-				<a class="badge badge-info" href="{{ url_for("tags",tag = p.name) }}"># {{ p.name }}</a>
-				{% endfor %}
-                
-                
-              </div><!-- /.blog-post -->
-        
-             
-        
-            
-
-
-
-
-
+{%block content %}
+      {% for post in posts %}
+         <div class="card mb-3">
+  <img src="https://dummyimage.com/640x4:3/" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ post.title }}</h5>
+     
+    <p class="card-text">  
+      {% filter markdown %} 
+      {{ post.body | truncate(150) }}
+      {% endfilter %}
+        </p>
+    
+    <small class="text-muted">Last updated 3 mins ago</small>
+    <a class="" href="{{ url_for('post',post_name=post.title)}}">Read More</a>
+{% for p in post.tags %}
+        <a class="badge badge-info" href="{{ url_for("tags",tag = p.name) }}"># {{ p.name }}</a>
+        {% endfor %}
+  </div>
+</div>
 {% endfor %}
 
 {% endblock %}

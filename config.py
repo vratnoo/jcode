@@ -13,5 +13,5 @@ class Config(object):
 	ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 	UPLOADED_PHOTOS_ALLOW= ALLOWED_EXTENSIONS
 	SECRET_KEY=os.environ.get('SECRET_KEY') or "KRICODE"
-	POSTS_PER_PAGE = 4
+	POSTS_PER_PAGE = 2
 	CU_PAGE = ""

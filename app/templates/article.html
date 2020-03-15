@@ -1,17 +1,18 @@
 {% extends "base.html" %}
 {%block content %}
- {% for post in posts %}
+ 
          <div class="mb-3">
-     <img src="https://dummyimage.com/640x4:3/" class="card-img-top" alt="...">
+     <img src="{{ url_for('uploads',filename=post.img)}}" class="card-img-top" alt="...">
 
-  <article>
+  <article >
                 <h1 class="card-title">{{ post.title }}</h1>
                 <p class="pb-2 text-center">published on JAN 21, 2020</p>
-                  {% filter markdown %} 
-      {{ post.body }}
-      {% endfilter %}
+                  <div class="wysiwyg">
+                 
+{{ post.body|markdown }}
+    </div>
               </article>
 
 </div>
- {% endfor %}
+
 {% endblock %}

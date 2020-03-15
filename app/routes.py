@@ -1,56 +1,83 @@
 from app import app
-from flask import render_template,request,redirect,flash,url_for
+from flask import render_template,request,redirect,flash,url_for,send_from_directory
 from app.model import Post,Tag,Page
 from werkzeug.utils import secure_filename
 from flask_uploads import UploadSet,configure_uploads
 import json,os
-from helper import is_active
+from helper import is_active,pagination
 
 # contaxt process
 @app.context_processor
 def helper_processor():
 	pages = Page.query.all()
 	tags = Tag.query.all()
-	return dict(is_active=is_active,pages=pages,tags=tags)
+	bc = request.path.split("/")
+	print(request.path)
+
+	return dict(is_active=is_active,pages=pages,tags=tags,bc=bc[1:])
 
 
 
-
+@app.route('/uploads/<path:filename>')
+def uploads(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename, as_attachment=True)
 
 @app.route('/')
 def index():
 	app.config['CU_PAGE'] = "index"
+	bc = request.path.split("/")
+	print(app.config['UPLOAD_FOLDER'])
+	pg = request.args.get('pg',1,type=int)
+	# posts = Post.query.all()
+	posts = Post.query.paginate(pg,app.config['POSTS_PER_PAGE'],False)
+	print(posts.pages)
+	pgnate = pagination(pg,posts.pages,posts.next_num,posts.prev_num)
 
-	posts = Post.query.all()
+
+
 	
-	return render_template('index.html',title="Jeeblog",posts=posts)
+	return render_template('index.html',title="Jeeblog",posts=posts.items,pgnate=pgnate)
 
 
 @app.route('/post/<post_name>')
 def post(post_name):
-	
-	posts = Post.query.filter_by(title=post_name)
-	p = Post.query.filter_by(title=post_name).first()
-	print(posts)
+	print(request.path)
+	post = Post.query.filter_by(title=post_name).first()
+	print(post)
 	app.config['CU_PAGE'] = "post"
 	
-	return render_template('article.html',title="JEEBLOG",posts=posts,)
+	return render_template('article.html',title="JEEBLOG",post=post)
 @app.route('/tags/<tag>')
 def tags(tag):
+	print(request.path)
 	pages  = Page.query.all()
-	p = Tag.query.filter_by(name=tag).first()
 	tags = Tag.query.all()
-	posts  = p.posts.all()
-	return render_template('index.html',title="Jeeblog",posts=posts)
+	p = Tag.query.filter_by(name=tag).first()
+	print(p)
+	pg = request.args.get('pg',1,type=int)
+	posts  = p.posts.paginate(pg,app.config['POSTS_PER_PAGE'],False)
+	pgnate = pagination(pg,posts.pages,posts.next_num,posts.prev_num)
+	if(len(posts.items)==0):
+		return render_template('404.html',title="Jeeblog")
+	return render_template('index.html',title="Jeeblog",posts=posts.items,pgnate=pgnate)
 
 @app.route('/page/<page>')
 def page(page):
-	print(request.url)
+	print(request.path.split("/"))
 	app.config['CU_PAGE'] = page
 	pages  = Page.query.all()
+	pg = request.args.get('pg',1,type=int)
 	p = Page.query.filter_by(name=page).first()
-	print(p)
-	return render_template('index.html',title="Jeeblog",posts=p.posts)
+	print(p.posts)
+	posts  = p.posts.paginate(pg,app.config['POSTS_PER_PAGE'],False)
+	pgnate = pagination(pg,posts.pages,posts.next_num,posts.prev_num)
+	if(len(posts.items)==0):
+		return render_template('404.html',title="Jeeblog")
+	return render_template('index.html',title="Jeeblog",posts=posts.items,pgnate=pgnate)
+
+
+
 # photo uploads functionnulity
 @app.route('/photo', methods=['GET', 'POST'])
 def photo():

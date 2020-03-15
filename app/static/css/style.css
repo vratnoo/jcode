@@ -1,10 +1,11 @@
 
+
 header{
 	border-bottom:1px solid #dfdfdf; 
 }
 footer{
 
-    background-color: #f7f7f7;
+    background-color: #e9ecef;
     border-top: 1px solid #dfdfdf;
 
 }
@@ -25,17 +26,27 @@ footer{
 	border-bottom:2px solid #4f7bfe;
 }
 .sideheader{
-	background-color: #e6e6f1;
+	background-color: #e9ecef;
     border-bottom: 1px solid #4f7bfe;
-    padding: 1rem;
+    padding: 0.5rem;
     color: #4f7bff; 
 }
 ul>li{
 	list-style: none;
 	margin-left: 0;
 }
+.card{
+	font-family: 'Merriweather', serif;!important;
+}
+.card-title{
+	font-weight:700;
+
+}
 .card:hover{
     border: 1px solid #cccccc;
     box-shadow: 1px 3px 6px 0px #e4e0e0;
 
+}
+.bg-bred{
+	text-transform: uppercase;
 }

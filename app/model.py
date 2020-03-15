@@ -22,14 +22,15 @@ class Post(db.Model):
     title = db.Column(db.String(50))
     body=db.Column(db.Text)
     timestamp=db.Column(db.DateTime,index=True,default=datetime.utcnow)
+    img = db.Column(db.String(200))
     #user_id=db.Column(db.Integer,db.ForeignKey('user.id'))
     page_id = db.Column(db.Integer,db.ForeignKey('page.id'))
-    page = db.relationship('Page',backref='posts',lazy=True)
+    page = db.relationship('Page',backref=db.backref('posts',lazy='dynamic'))
     tags = db.relationship('Tag',secondary='tag_post',backref=db.backref('posts',lazy='dynamic'))
 
 
     def __repr__(self):
-        return '<post body {} user'.format(self.body)
+        return '<post body {} user'.format(self.title)
 
 
 # class for tag systemm
@@ -44,6 +45,8 @@ class Tag(db.Model):
 class Page(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(40))
+    def __repr__(self):
+        return f"page is {self.name}"
     
 
 

@@ -4,11 +4,12 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+<link href="https://fonts.googleapis.com/css?family=Merriweather|Merriweather+Sans&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static',filename='css/style.css')}}" rel="stylesheet">
+        <link href="{{ url_for('static',filename='css/mark.css')}}" rel="stylesheet">
 
       {% if title %}
    <title>{{ title}}</title>
@@ -48,8 +49,24 @@
   <!-- main content -->
   <main class="container mt-3">
     <div class="row">
-     
+   
       <div class="col-md-6 order-md-2 mb-3">
+           {% if bc|length>1 %}
+            <!-- breadcrumb -->
+        <nav aria-label="breadcrumb">
+  <ol class="breadcrumb bg-bred">
+    {% for link in bc %}
+    {% if bc[-1]==link %}
+    <li class="breadcrumb-item text-center active">{{ link }}</li>
+
+    {% else %}
+    <li class="breadcrumb-item text-center "><a href="#">{{ link }}</a></li>
+    {% endif%}
+  
+  {% endfor %}
+  </ol>
+</nav>
+{% endif %}
 
    {% block content%}
     
@@ -76,8 +93,20 @@
          </ul>
       </div>
     </div>
-    
+   {% if pgnate %} 
+    <nav aria-label="Page navigation example ">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {{ pgnate.is_prev }}"><a class="page-link" href="{{ pgnate.prev_url }}">Previous</a></li>
+    {% for item in range(pgnate.s,pgnate.e+1) %}
+    <li class="page-item"><a class="page-link" href="?pg={{ item }}">{{ item }}</a></li>
+    {% endfor%}
+    <li class="page-item {{ pgnate.is_next }}"><a class="page-link " href="{{ pgnate.next_url }}">Next</a></li>
+  </ul>
+  </nav>
+  {% endif%}
   </main>
+
+  
 
   <!-- footer -->
   <footer class="py-2">

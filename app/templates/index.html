@@ -2,7 +2,7 @@
 {%block content %}
       {% for post in posts %}
          <div class="card mb-3">
-  <img src="https://dummyimage.com/640x4:3/" class="card-img-top" alt="...">
+<img src="{{ url_for('uploads',filename=post.img) }}" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">{{ post.title }}</h5>
      
